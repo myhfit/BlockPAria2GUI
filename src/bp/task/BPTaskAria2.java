@@ -18,6 +18,7 @@ import bp.env.BPEnvManager;
 import bp.res.BPResourceDirLocal;
 import bp.util.NumberUtil;
 import bp.util.ObjUtil;
+import bp.util.ProcessUtil;
 import bp.util.Std;
 import bp.util.ThreadUtil;
 import bp.util.ThreadUtil.ProcessThread;
@@ -60,7 +61,7 @@ public abstract class BPTaskAria2 extends BPTaskLocal<Boolean> implements BPTask
 		setStarted();
 		triggerStatusChanged();
 
-		String[] cmdarr = ThreadUtil.fixCommandArgs(exepath, args);
+		String[] cmdarr = ProcessUtil.fixCommandArgs(exepath, args);
 		Process p;
 		try
 		{
