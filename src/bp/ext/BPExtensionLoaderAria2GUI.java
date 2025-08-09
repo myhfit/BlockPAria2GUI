@@ -4,7 +4,7 @@ import bp.context.BPFileContext;
 import bp.env.BPEnvExternalTools;
 import bp.env.BPEnvManager;
 
-public class BPExtensionLoaderAria2GUI implements BPExtensionLoaderGUISwing
+public class BPExtensionLoaderAria2GUI implements BPExtensionLoaderGUI<Object>
 {
 	public String getName()
 	{
@@ -23,6 +23,11 @@ public class BPExtensionLoaderAria2GUI implements BPExtensionLoaderGUISwing
 
 	public void preload()
 	{
+	}
+
+	public String getUIType()
+	{
+		return "Swing";
 	}
 
 	public void install(BPFileContext context)
