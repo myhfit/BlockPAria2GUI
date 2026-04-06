@@ -4,7 +4,7 @@ import bp.context.BPFileContext;
 import bp.env.BPEnvExternalTools;
 import bp.env.BPEnvManager;
 
-public class BPExtensionLoaderAria2GUI implements BPExtensionLoaderGUI<Object>
+public class BPExtensionLoaderAria2GUI implements BPExtensionLoaderGUISwing
 {
 	public String getName()
 	{
