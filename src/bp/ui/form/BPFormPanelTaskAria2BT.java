@@ -3,13 +3,12 @@ package bp.ui.form;
 import java.awt.Component;
 import java.util.Map;
 
+import javax.swing.SwingUtilities;
+
 import bp.BPCore;
-import bp.res.BPResource;
-import bp.res.BPResourceFileSystem;
-import bp.ui.dialog.BPDialogSelectResource2;
-import bp.ui.dialog.BPDialogSelectResource2.SELECTTYPE;
 import bp.ui.scomp.BPTextField;
 import bp.ui.scomp.BPTextFieldPane;
+import bp.ui.util.CommonUIOperations;
 
 public class BPFormPanelTaskAria2BT extends BPFormPanelTask
 {
@@ -54,31 +53,16 @@ public class BPFormPanelTaskAria2BT extends BPFormPanelTask
 
 	protected String onSelectTorrentFile(String oldfile)
 	{
-		String rc = null;
-		BPDialogSelectResource2 dlg = new BPDialogSelectResource2();
-		dlg.setSelectType(SELECTTYPE.FILE);
-		dlg.showOpen();
-		BPResource res = dlg.getSelectedResource();
-		if (res != null)
-		{
-			BPResourceFileSystem fres = (BPResourceFileSystem) res;
-			rc = BPCore.getFileContext().comparePath(fres.getFileFullName());
-		}
-		return rc;
+		if (oldfile != null && oldfile.trim().length() == 0)
+			oldfile = null;
+		return CommonUIOperations.showOpenFileDialog(SwingUtilities.getWindowAncestor(this), oldfile);
 	}
 
 	protected String onSelectWorkDir(String oldpath)
 	{
-		String rc = null;
-		BPDialogSelectResource2 dlg = new BPDialogSelectResource2();
-		dlg.setSelectType(SELECTTYPE.DIR);
-		dlg.showOpen();
-		BPResource res = dlg.getSelectedResource();
-		if (res != null)
-		{
-			BPResourceFileSystem fres = (BPResourceFileSystem) res;
-			rc = BPCore.getFileContext().comparePath(fres.getFileFullName());
-		}
+		String rc = CommonUIOperations.showOpenDirDialog(SwingUtilities.getWindowAncestor(this), oldpath);
+		if (rc != null)
+			rc = BPCore.getFileContext().comparePath(rc);
 		return rc;
 	}
 }
