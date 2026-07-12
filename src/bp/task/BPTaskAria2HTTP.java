@@ -57,7 +57,7 @@ public class BPTaskAria2HTTP extends BPTaskAria2
 			return new BPTaskAria2HTTP();
 		}
 
-		public Class<? extends BPTask<?>> getTaskClass()
+		public Class<? extends BPTask<?>> getInstanceClass()
 		{
 			return BPTaskAria2HTTP.class;
 		}

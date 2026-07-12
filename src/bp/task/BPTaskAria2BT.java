@@ -77,7 +77,7 @@ public class BPTaskAria2BT extends BPTaskAria2
 			return super.create(taskdata);
 		}
 
-		public Class<? extends BPTask<?>> getTaskClass()
+		public Class<? extends BPTask<?>> getInstanceClass()
 		{
 			return BPTaskAria2BT.class;
 		}
