@@ -1,0 +1,10 @@
+{
+	"parent":"bp.task.BPTaskBase",
+	"controller":"task.BPFormControllerTaskAria2HTTP",
+	"items":
+	[
+		{"itemtype":"textfield","key":"url","label":"URL","required":true},
+		{"itemtype":"textfield_more","key":"workdir","label":"WORK_DIR","lbltr":"c,c_c","params":{"canempty":true}},
+		{"itemtype":"textfield","key":"output","label":"OUTPUT","lbltr":"c,c_c","params":{"canempty":true}},
+	]
+}

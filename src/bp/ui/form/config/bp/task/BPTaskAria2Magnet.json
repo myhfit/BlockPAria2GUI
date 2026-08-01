@@ -1,0 +1,9 @@
+{
+	"parent":"bp.task.BPTaskBase",
+	"controller":"task.BPFormControllerTaskAria2Magnet",
+	"items":
+	[
+		{"itemtype":"textfield","key":"magnet","label":"MAGNET","lbltr":"c,c_webcfs","required":true},
+		{"itemtype":"textfield_more","key":"workdir","label":"WORK_DIR","lbltr":"c,c_c","params":{"canempty":true}},
+	]
+}

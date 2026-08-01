@@ -9,6 +9,7 @@ import java.io.PipedOutputStream;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import bp.BPCore;
@@ -29,6 +30,7 @@ public abstract class BPTaskAria2 extends BPTaskLocal<Boolean> implements BPTask
 	protected volatile PipedOutputStream m_bos;
 	protected AtomicBoolean m_outputstopflag = new AtomicBoolean();
 	protected volatile boolean m_nameredirected = false;
+	protected volatile ConcurrentLinkedQueue<String> m_ll;
 
 	protected volatile ConcurrentHashMap<String, BPTransferInfo> m_transtatmap;
 
@@ -71,6 +73,8 @@ public abstract class BPTaskAria2 extends BPTaskLocal<Boolean> implements BPTask
 			PipedInputStream bis = new PipedInputStream(bos);
 			m_bos = bos;
 			m_bis = bis;
+			if (Std.getStdMode() == Std.STDMODE_DEBUG)
+				m_ll = new ConcurrentLinkedQueue<>();
 			ThreadUtil.runNewThread(this::onOutput, true);
 			p = new ProcessBuilder(cmdarr).directory(((BPResourceDirLocal) BPCore.getFileContext().getDir((workdir == null ? "." : workdir))).getFileObject()).redirectErrorStream(true).start();
 			ProcessThread t = new ProcessThread(p);
@@ -100,6 +104,11 @@ public abstract class BPTaskAria2 extends BPTaskLocal<Boolean> implements BPTask
 						setFailed(new RuntimeException("Exit Code:" + exitcode));
 						BPCore.saveTasks();
 						m_future.complete(false);
+						if (Std.getStdMode() == Std.STDMODE_DEBUG && m_ll != null)
+						{
+							for (String l : m_ll)
+								Std.debug(l);
+						}
 					}
 					else
 					{
@@ -200,6 +209,7 @@ public abstract class BPTaskAria2 extends BPTaskLocal<Boolean> implements BPTask
 	protected void onOutput()
 	{
 		PipedInputStream bis = m_bis;
+		ConcurrentLinkedQueue<String> ll = m_ll;
 		try (InputStreamReader isr = new InputStreamReader(bis); BufferedReader reader = new BufferedReader(isr))
 		{
 			boolean flag;
@@ -215,6 +225,18 @@ public abstract class BPTaskAria2 extends BPTaskLocal<Boolean> implements BPTask
 					flag = true;
 					String line = reader.readLine();
 					lines.add(line);
+					if (ll != null)
+					{
+						ll.add(line);
+						{
+							int lls = ll.size();
+							if (lls > 20)
+							{
+								for (int i = 10; i < lls; i++)
+									ll.poll();
+							}
+						}
+					}
 					int c = lines.size();
 					while (c > 10000)
 					{
